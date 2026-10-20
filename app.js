@@ -132,7 +132,7 @@ function renderGuide(g, isGenerated) {
 
   const ap = g.approval;
   const approval = ap ? h('section', { class: 'block', 'aria-labelledby': 'h-approval' },
-    h('h2', { id: 'h-approval' }, ap.required ? 'Approval is required' : 'No approval review needed', ' ', chip(ap.confidence)),
+    h('h2', { id: 'h-approval' }, ap.required ? 'Approval is required' : (ap.confidence === 'unverified' ? 'Approval: not confirmed' : 'No approval review needed'), ' ', chip(ap.confidence)),
     ap.what_is_reviewed ? h('p', null, h('strong', null, 'What is reviewed: '), ap.what_is_reviewed) : null,
     ap.process ? h('p', null, h('strong', null, 'Process: '), ap.process) : null) : null;
 
@@ -169,7 +169,7 @@ function renderGuide(g, isGenerated) {
 
   const src = (g.sources || []).length ? h('section', { class: 'block', 'aria-labelledby': 'h-src' },
     h('h2', { id: 'h-src' }, 'Sources'),
-    h('ul', { class: 'plain' }, g.sources.map(s => h('li', null, link(s.title || s.url, s.url), s.used_for ? h('span', { class: 'meta' }, ' - ' + s.used_for) : null)))) : null;
+    h('ul', { class: 'plain' }, g.sources.map(s => h('li', null, link(s.title || s.url, s.url), s.official === false ? h('span', { class: 'chip inferred' }, 'third-party') : null, s.used_for ? h('span', { class: 'meta' }, ' - ' + s.used_for) : null)))) : null;
 
   const copyLink = h('button', { class: 'secondary', type: 'button', onclick: () => copy(isGenerated ? null : location.href) }, 'Copy link');
   const copyMd = h('button', { class: 'secondary', type: 'button', onclick: () => copy(toMarkdown(g), 'Markdown copied') }, 'Copy as Markdown');

@@ -1,0 +1,15 @@
+{"slug":"sample","app":"Sample Provider","provider_url":"https://example.com","developer_docs_url":"https://example.com/docs",
+"summary":"A temporary guide used only to test the renderer. It has every field in the schema.",
+"difficulty":{"level":"moderate","rationale":"Needs a verified domain and a manual review."},
+"time":{"setup":"20-40 minutes","approval_wait":"1-3 business days","confidence":"inferred"},
+"approval":{"required":true,"what_is_reviewed":"Privacy policy, scopes requested, demo video.","process":"Submit the app for review in the developer console.","confidence":"documented"},
+"steps":[
+{"n":1,"title":"Create the developer account","detail":"Sign in and accept the developer terms.","who":"you","url":"https://example.com/signup"},
+{"n":2,"title":"Register the app","detail":"Name, logo, and redirect URI https://backend.composio.dev/api/v1/auth-apps/add.","who":"agent","url":"https://example.com/apps"},
+{"n":3,"title":"Pick scopes","detail":"Request the narrowest scopes that work.","who":"either","url":"https://example.com/scopes"}],
+"requirements":[{"text":"A privacy policy URL","confidence":"documented"},{"text":"Business email domain","confidence":"unverified"}],
+"blockers":[{"issue":"Review rejected for broad scopes","what_to_do":"Resubmit with a narrower scope list and a justification per scope.","confidence":"inferred"}],
+"agent_vs_you":{"agent_can":["Fill the registration form","Draft scope justifications"],"you_must":["Log in","Accept ToS","Submit for review"]},
+"uncertainties":["Exact review time is not published."],
+"sources":[{"title":"Provider docs","url":"https://example.com/docs","used_for":"Steps 1-3"}],
+"tested":false,"last_checked":"2026-10-20"}

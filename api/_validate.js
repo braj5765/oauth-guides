@@ -32,6 +32,7 @@ function validateGuide(g) {
   else g.blockers.forEach((b, i) => { if (!isObj(b) || !isStr(b.issue) || !isStr(b.what_to_do) || !CONF.includes(b.confidence)) e.push(`blockers[${i}] needs issue, what_to_do, valid confidence`); });
   const av = g.agent_vs_you;
   if (!isObj(av) || !Array.isArray(av.agent_can) || !Array.isArray(av.you_must) || ![...av.agent_can, ...av.you_must].every(isStr)) e.push('agent_vs_you needs string arrays agent_can and you_must');
+  else if (av.agent_can.length < 2 || av.you_must.length < 1) e.push('agent_vs_you needs at least 2 agent_can items and at least 1 you_must item');
   if (!Array.isArray(g.uncertainties) || !g.uncertainties.every(isStr)) e.push('uncertainties must be an array of strings');
   if (!Array.isArray(g.sources) || g.sources.length < 1) e.push('sources must be a non-empty array');
   else g.sources.forEach((s, i) => { if (!isObj(s) || !isStr(s.title) || !isUrl(s.url) || !isStr(s.used_for)) e.push(`sources[${i}] needs title, url, used_for`); });

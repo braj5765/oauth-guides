@@ -66,7 +66,7 @@ const gemini = {
 // ---------- Tavily search (free tier) + OpenAI-compatible chat (Groq / OpenRouter) ----------
 async function tavilyResearch(app) {
   const key = need('TAVILY_API_KEY');
-  const queries = [`${app} developer OAuth 2.0 register app official documentation`, `${app} OAuth app review verification approval requirements`];
+  const queries = [`${app} developer OAuth 2.0 register app official documentation`, `${app} OAuth app review verification approval requirements`, `${app} API app development vs production status user limit apply for production`];
   const results = [];
   for (const q of queries) {
     const d = await postJson('https://api.tavily.com/search', { Authorization: `Bearer ${key}` },
@@ -98,7 +98,7 @@ function openAiCompat(label, url, keyName, defaultModel, modelEnv, extraHeaders 
     },
   };
 }
-const groq = openAiCompat('Groq', 'https://api.groq.com/openai/v1/chat/completions', 'GROQ_API_KEY', 'llama-3.3-70b-versatile', 'GROQ_MODEL');
+const groq = openAiCompat('Groq', 'https://api.groq.com/openai/v1/chat/completions', 'GROQ_API_KEY', 'openai/gpt-oss-120b', 'GROQ_MODEL');
 const openrouter = openAiCompat('OpenRouter', 'https://openrouter.ai/api/v1/chat/completions', 'OPENROUTER_API_KEY', 'meta-llama/llama-3.3-70b-instruct:free', 'OPENROUTER_MODEL');
 
 // ---------- Mock (tests; no network, no key) ----------

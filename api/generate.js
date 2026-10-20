@@ -110,6 +110,9 @@ async function generateGuide(app, provider) {
   if (!enforceSources(obj, research) || validateGuide(obj).length) {
     return { status: 502, body: { error: 'The generated guide cited no verifiable sources, so it was discarded.', reason: 'No source URL matched the documentation that was read.' } };
   }
+  // Flag sources that are not on the provider's own domain (heuristic: hostname contains the app's name or the queried domain's root).
+  const token = String(app).toLowerCase().replace(/^https?:\/\//, '').split(/[.\s/]/).filter(t => t.length > 2 && !['www', 'com', 'the', 'api'].includes(t))[0] || '';
+  for (const sr of obj.sources) { const h = host(sr.url) || ''; sr.official = !!token && h.includes(token); }
   return { status: 200, body: { guide: obj } };
 }
 

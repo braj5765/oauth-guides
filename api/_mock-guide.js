@@ -11,7 +11,7 @@ module.exports = {
   ],
   requirements: [{ text: 'Redirect URI over HTTPS', confidence: 'documented' }],
   blockers: [{ issue: 'Review time unknown', what_to_do: 'Apply early.', confidence: 'unverified' }],
-  agent_vs_you: { agent_can: ['Draft redirect URIs'], you_must: ['Log in', 'Submit review'] },
+  agent_vs_you: { agent_can: ['Draft redirect URIs', 'Generate the token-exchange code'], you_must: ['Log in', 'Submit review'] },
   uncertainties: ['No official review time.'],
   sources: [{ title: 'Register', url: 'https://docs.example.com/oauth/register', used_for: 'steps' }, { title: 'Review', url: 'https://docs.example.com/oauth/review', used_for: 'review' }],
   tested: false, last_checked: '2026-10-20',

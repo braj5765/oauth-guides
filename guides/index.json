@@ -1,0 +1,38 @@
+[
+  {
+    "slug": "github",
+    "app": "GitHub",
+    "summary": "To let your users connect GitHub you register either a GitHub App (GitHub's recommended choice) or an OAuth App in your own account's Developer settings, then send users through the standard authorize-and-callback flow. There is no GitHub review gate for either type; the only approvals are on the customer side (organization owners may need to approve or install your app).",
+    "provider_url": "https://github.com",
+    "difficulty": "easy",
+    "setup": "15–45 min",
+    "approval_wait": "None to register; org owner may need to approve"
+  },
+  {
+    "slug": "google",
+    "app": "Google (Gmail)",
+    "summary": "To let users connect their Gmail, you create a Google Cloud project, enable the Gmail API, configure the Google Auth platform (consent screen) and create an OAuth client. Testing mode works immediately but is capped at 100 test users with 7-day tokens; any real public launch with Gmail read/modify scopes requires OAuth verification plus an annual third-party security assessment.",
+    "provider_url": "https://console.cloud.google.com/auth/overview",
+    "difficulty": "hard",
+    "setup": "30–60 min (test mode)",
+    "approval_wait": "Days to weeks; restricted scopes: several weeks"
+  },
+  {
+    "slug": "linkedin",
+    "app": "LinkedIn",
+    "summary": "LinkedIn OAuth apps are created in the LinkedIn Developer Portal. Sign In with LinkedIn (OpenID Connect) and Share on LinkedIn (post as a member) are self-serve products; anything touching company pages, ads, or analytics (Community Management, Advertising and similar Marketing APIs) needs an application and review by LinkedIn.",
+    "provider_url": "https://www.linkedin.com",
+    "difficulty": "moderate",
+    "setup": "15–45 min (self-serve)",
+    "approval_wait": "None self-serve; Marketing APIs need an application"
+  },
+  {
+    "slug": "slack",
+    "app": "Slack",
+    "summary": "A Slack app with the OAuth v2 install flow lets any workspace's users connect their Slack to your product. Creating the app and installing it in workspaces you control is quick and needs no review; listing in the Slack Marketplace is a separate, slow, human-reviewed process that is only needed for some distribution goals.",
+    "provider_url": "https://slack.com",
+    "difficulty": "moderate",
+    "setup": "30–60 min",
+    "approval_wait": "None unlisted; Marketplace review up to ~10 weeks"
+  }
+]

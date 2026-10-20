@@ -1,0 +1,264 @@
+{
+  "slug": "google",
+  "app": "Google (Gmail)",
+  "provider_url": "https://console.cloud.google.com/auth/overview",
+  "developer_docs_url": "https://developers.google.com/workspace/gmail/api/guides",
+  "summary": "To let users connect their Gmail, you create a Google Cloud project, enable the Gmail API, configure the Google Auth platform (consent screen) and create an OAuth client. Testing mode works immediately but is capped at 100 test users with 7-day tokens; any real public launch with Gmail read/modify scopes requires OAuth verification plus an annual third-party security assessment.",
+  "difficulty": {
+    "level": "hard",
+    "rationale": "Basic setup is easy, but public use of common Gmail scopes (readonly, modify, compose are restricted) requires domain/brand verification, a demo video, and a recurring third-party security assessment if data touches your servers. Only narrow scopes such as gmail.send (sensitive) or gmail.labels (non-sensitive) avoid the heaviest tier."
+  },
+  "time": {
+    "setup": "30-60 minutes for a working Testing-mode app (inferred; no official figure)",
+    "approval_wait": "Brand verification: automated usually minutes, manual usually 2-3 business days (documented). Sensitive-scope review: typically 3-5 business days (documented). Restricted-scope verification: 'can potentially take several weeks' (documented, vague). Security assessment duration and cost: no official figure. Realistic end-to-end for restricted scopes: inferred several weeks to a few months, unverified.",
+    "confidence": "documented"
+  },
+  "approval": {
+    "required": true,
+    "what_is_reviewed": "Required for External apps in production requesting sensitive or restricted scopes. Google reviews branding (name, logo, support email), domain ownership, public homepage, privacy policy, per-scope justification, and a demo video of the OAuth flow. For restricted scopes where data is stored on or transmitted through a server, an independent Google-approved assessor (CASA framework via App Defense Alliance) also assesses security. Apps using only non-sensitive scopes need no scope verification; branding verification is needed only to show a logo/name.",
+    "process": "1) Configure branding, homepage, privacy policy and authorized domains; verify domains in Search Console. 2) Verify branding (needed before scope verification). 3) Declare scopes on the Data Access page, write justifications and submit the unlisted YouTube demo video, then submit for verification. 4) Respond to Trust & Safety emails. 5) For restricted scopes with server-side storage/transit, complete the third-party security assessment; the assessor's Letter of Assessment starts a 12-month cycle, after which reverification and reassessment are required. Pricing for the assessment is not stated in Google's docs.",
+    "confidence": "documented"
+  },
+  "steps": [
+    {
+      "n": 1,
+      "title": "Create or choose a Google Cloud project",
+      "detail": "Use a dedicated project for the production app (verification attaches to the project). Use a separate project for dev/testing.",
+      "who": "you",
+      "url": "https://developers.google.com/workspace/guides/create-project"
+    },
+    {
+      "n": 2,
+      "title": "Enable the Gmail API",
+      "detail": "Enable Gmail API in the project's API Library (can also be done with gcloud once authenticated).",
+      "who": "either",
+      "url": "https://developers.google.com/workspace/gmail/api/quickstart/python"
+    },
+    {
+      "n": 3,
+      "title": "Configure Google Auth platform: Branding and Audience",
+      "detail": "Set app name, user support email, developer contact email, accept the API Services User Data Policy. Choose External audience (Internal only works inside your own Workspace org). New External apps start in Testing status.",
+      "who": "you",
+      "url": "https://support.google.com/cloud/answer/15549945"
+    },
+    {
+      "n": 4,
+      "title": "Add test users (Testing mode only)",
+      "detail": "Add up to 100 test user emails. Test authorizations and refresh tokens expire after 7 days when sensitive/restricted scopes are requested.",
+      "who": "you",
+      "url": "https://support.google.com/cloud/answer/15549945"
+    },
+    {
+      "n": 5,
+      "title": "Declare scopes on the Data Access page",
+      "detail": "Choose the narrowest Gmail scopes that support the feature (e.g. gmail.send is sensitive; gmail.readonly/modify/compose are restricted). The console labels each scope non-sensitive, sensitive or restricted.",
+      "who": "either",
+      "url": "https://developers.google.com/workspace/gmail/api/auth/scopes"
+    },
+    {
+      "n": 6,
+      "title": "Create the OAuth client",
+      "detail": "Google Auth platform > Clients > Create Client (Web application for a hosted agent; HTTPS redirect URIs required in production). Store client ID/secret securely. Quickstart notes an optional 'AI-powered agent' checkbox that cannot be changed later.",
+      "who": "either",
+      "url": "https://developers.google.com/workspace/gmail/api/quickstart/python"
+    },
+    {
+      "n": 7,
+      "title": "Prepare homepage, privacy policy and domain",
+      "detail": "Publish a public homepage (not Play Store/Facebook page) describing the app and linking the privacy policy, on a domain you own. Privacy policy must be on the same domain as the homepage and disclose how Google user data is accessed, used, stored and shared. Verify the top private domain in Search Console with an Owner/Editor account on the project.",
+      "who": "you",
+      "url": "https://developers.google.com/identity/protocols/oauth2/production-readiness/brand-verification"
+    },
+    {
+      "n": 8,
+      "title": "Verify branding",
+      "detail": "Click Verify Branding. Automated usually takes minutes; manual review usually 2-3 business days. A compliant result stays valid for 7 days, so publish within that window.",
+      "who": "you",
+      "url": "https://developers.google.com/identity/protocols/oauth2/production-readiness/brand-verification"
+    },
+    {
+      "n": 9,
+      "title": "Publish to production",
+      "detail": "Select Publish app to move from Testing to In production (available to any Google Account). Without verification and with sensitive/restricted scopes, users see the Unverified app warning and total new users are capped at 100 for the project's lifetime.",
+      "who": "you",
+      "url": "https://support.google.com/cloud/answer/15549945"
+    },
+    {
+      "n": 10,
+      "title": "Submit for sensitive/restricted scope verification",
+      "detail": "Provide per-scope justification (including why narrower scopes will not work), documentation links, and an unlisted YouTube demo video showing the full OAuth flow in English, the consent screen with app name, the client ID in the address bar, and each scope's functionality.",
+      "who": "you",
+      "url": "https://developers.google.com/identity/protocols/oauth2/production-readiness/sensitive-scope-verification"
+    },
+    {
+      "n": 11,
+      "title": "Complete security assessment (restricted scopes with server-side data)",
+      "detail": "Engage a Google-empanelled assessor per the CASA framework; obtain the Letter of Assessment. Repeat at least every 12 months. If data is processed only on the user's device and never reaches your servers, the assessment is documented as not required, but confirm with Google for your architecture.",
+      "who": "you",
+      "url": "https://developers.google.com/identity/protocols/oauth2/production-readiness/restricted-scope-verification"
+    },
+    {
+      "n": 12,
+      "title": "Implement OAuth flow and token handling",
+      "detail": "Standard authorization-code flow with offline access; handle refresh-token invalidation (7-day Testing expiry, 6 months unused, 100 tokens per account per client, revocation, password change for Gmail scopes, admin policy). Comply with Limited Use requirements of the API Services User Data Policy.",
+      "who": "agent",
+      "url": "https://developers.google.com/identity/protocols/oauth2#expiration"
+    }
+  ],
+  "requirements": [
+    {
+      "text": "Google Cloud project with Gmail API enabled and an OAuth client.",
+      "confidence": "documented"
+    },
+    {
+      "text": "Public homepage on a domain you own and have verified in Google Search Console; privacy policy on same domain linked from the consent screen.",
+      "confidence": "documented"
+    },
+    {
+      "text": "Narrowest possible scopes; all scopes declared on the Data Access page; justification for each sensitive/restricted scope.",
+      "confidence": "documented"
+    },
+    {
+      "text": "Demo video (unlisted YouTube, English) showing the OAuth flow, consent screen, client ID in address bar and scope functionality.",
+      "confidence": "documented"
+    },
+    {
+      "text": "HTTPS redirect URIs and no test-only/localhost endpoints in production clients.",
+      "confidence": "documented"
+    },
+    {
+      "text": "Restricted scopes with server-side storage or transit: Google-approved third-party security assessment (CASA), repeated at least every 12 months.",
+      "confidence": "documented"
+    },
+    {
+      "text": "Project Owner/Editor Google Account that is also a verified owner in Search Console.",
+      "confidence": "documented"
+    },
+    {
+      "text": "Monitor developer contact and support email; Trust & Safety follows up by email.",
+      "confidence": "documented"
+    }
+  ],
+  "blockers": [
+    {
+      "issue": "Testing mode: max 100 test users, and refresh tokens expire after 7 days (when sensitive/restricted scopes are requested), so connections silently die weekly.",
+      "what_to_do": "Use Testing only for development. Move to In production and pursue verification before real users depend on it. Apps requesting only openid/email/profile are exempt from the 7-day expiry.",
+      "confidence": "documented"
+    },
+    {
+      "issue": "Unverified app warning and 100 new-user lifetime cap when publishing to production with sensitive/restricted scopes without verification. Cap cannot be reset.",
+      "what_to_do": "Do not publish publicly with unverified scopes beyond a pilot; create a separate project for pilots so the production project's cap is not consumed. Request verification (documented appeal path).",
+      "confidence": "documented"
+    },
+    {
+      "issue": "Restricted Gmail scopes (readonly, modify, compose, metadata, full access, settings) trigger the security assessment if data is stored on or passes through your servers.",
+      "what_to_do": "Re-scope: gmail.send (sensitive) for send-only features, gmail.labels (non-sensitive) for labels. Otherwise budget for CASA assessment and annual repeat; obtain assessor quotes (cost is not published by Google).",
+      "confidence": "documented"
+    },
+    {
+      "issue": "Assessment cost and duration are not stated in official docs.",
+      "what_to_do": "Treat any dollar or week figure from vendor/community pages as unverified; request quotes from Google-empanelled assessors listed via the App Defense Alliance CASA pages.",
+      "confidence": "unverified"
+    },
+    {
+      "issue": "Domain ownership failures (shared domains such as *.vercel.app or provider-hosted domains; subdomain-only verification).",
+      "what_to_do": "Use a domain you own; verify the top private domain in Search Console; include homepage, privacy policy, ToS and redirect domains in Authorized domains.",
+      "confidence": "documented"
+    },
+    {
+      "issue": "Changing redirect URLs, JavaScript origins, or product name after verification may require re-verification; branding edits cannot be made while verification is in progress.",
+      "what_to_do": "Freeze branding and URLs before submitting; cancel the verification request if a change is unavoidable.",
+      "confidence": "documented"
+    },
+    {
+      "issue": "Refresh tokens are invalidated by revocation, password change (Gmail scopes), 6 months unused, the 100-token-per-client-per-account limit, or admin policy.",
+      "what_to_do": "Handle invalid_grant by prompting re-authorization; avoid minting excess refresh tokens per user.",
+      "confidence": "documented"
+    },
+    {
+      "issue": "Workspace admins may block unapproved OAuth clients for sensitive scopes (admin_policy_enforced).",
+      "what_to_do": "Ask the customer admin to allow-list your client ID.",
+      "confidence": "documented"
+    }
+  ],
+  "agent_vs_you": {
+    "agent_can": [
+      "Draft homepage, privacy policy text, scope justifications and demo-video script",
+      "Choose minimal scope set and map features to scope sensitivity",
+      "Enable the Gmail API and create client config via gcloud/console if given authenticated access by the owner",
+      "Implement OAuth code flow, token refresh and invalid_grant handling",
+      "Monitor refresh failures and prepare re-verification checklists"
+    ],
+    "you_must": [
+      "Sign in to Google Cloud and accept the API Services User Data Policy",
+      "Own and verify the domain in Search Console",
+      "Record and upload the demo video to YouTube",
+      "Click Verify Branding, Publish app and submit for verification",
+      "Respond to Trust & Safety emails from the developer contact address",
+      "Engage and pay a Google-approved assessor for restricted-scope security assessment and renew annually",
+      "Add test users"
+    ]
+  },
+  "uncertainties": [
+    "Official docs give 'several weeks' for restricted-scope verification but no breakdown; real durations vary.",
+    "No official cost or assessment duration for CASA; any figures seen elsewhere are unverified.",
+    "Exact behavior when the 100-user cap is reached is not specified in the doc (only that new users may be blocked).",
+    "Whether a given architecture counts as 'stores or transmits restricted data on servers' for an AI agent is a Google judgment; confirm during verification.",
+    "Console UI labels change (Google Auth platform vs older OAuth consent screen); steps are docs-based, not tested.",
+    "Docs mention CASA tiers/assessor lists on other pages not fetched here."
+  ],
+  "sources": [
+    {
+      "title": "OAuth App Verification Help Center",
+      "url": "https://support.google.com/cloud/answer/13463073",
+      "used_for": "Verification overview, annual re-verification for restricted scopes"
+    },
+    {
+      "title": "Using OAuth 2.0 to Access Google APIs (refresh token expiration)",
+      "url": "https://developers.google.com/identity/protocols/oauth2#expiration",
+      "used_for": "7-day Testing expiry, 6 months unused, 100 tokens per client"
+    },
+    {
+      "title": "Choose Gmail API scopes",
+      "url": "https://developers.google.com/workspace/gmail/api/auth/scopes",
+      "used_for": "Scope classification"
+    },
+    {
+      "title": "Restricted scope verification",
+      "url": "https://developers.google.com/identity/protocols/oauth2/production-readiness/restricted-scope-verification",
+      "used_for": "Security assessment, CASA, 12-month cycle, 'several weeks', brand verification 2-3 days"
+    },
+    {
+      "title": "Brand verification requirements",
+      "url": "https://developers.google.com/identity/protocols/oauth2/production-readiness/brand-verification",
+      "used_for": "Domain, homepage, privacy policy, timelines, 7-day validity"
+    },
+    {
+      "title": "Sensitive scope verification",
+      "url": "https://developers.google.com/identity/protocols/oauth2/production-readiness/sensitive-scope-verification",
+      "used_for": "3-5 business days, demo video, exceptions"
+    },
+    {
+      "title": "Publishing status and user types (Help Center)",
+      "url": "https://support.google.com/cloud/answer/15549945",
+      "used_for": "100 test users, Testing vs In production, lifetime 100-user cap"
+    },
+    {
+      "title": "Unverified apps (Help Center)",
+      "url": "https://support.google.com/cloud/answer/7454865",
+      "used_for": "Unverified screen, 100-user cap, submission steps"
+    },
+    {
+      "title": "Policy compliance",
+      "url": "https://developers.google.com/identity/protocols/oauth2/production-readiness/policy-compliance",
+      "used_for": "Homepage/privacy/domain requirements"
+    },
+    {
+      "title": "Gmail API Python quickstart",
+      "url": "https://developers.google.com/workspace/gmail/api/quickstart/python",
+      "used_for": "Setup steps"
+    }
+  ],
+  "tested": false,
+  "last_checked": "2026-10-20"
+}

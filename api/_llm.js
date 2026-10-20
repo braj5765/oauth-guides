@@ -8,8 +8,10 @@ const { RESEARCH_PROMPT } = require('./_prompt');
 
 class ConfigError extends Error {}
 const need = name => {
-  const v = process.env[name];
+  const v = (process.env[name] || '').trim();
   if (!v) throw new ConfigError(`Server is missing the ${name} environment variable. See README-DEPLOY.md.`);
+  // A pasted key must be one token. Never echo the value itself.
+  if (/\s/.test(v)) throw new ConfigError(`The ${name} environment variable contains spaces or line breaks (it was probably pasted more than once). Re-enter it as a single value and redeploy.`);
   return v;
 };
 async function postJson(url, headers, body, label) {

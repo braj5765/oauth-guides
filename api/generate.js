@@ -137,8 +137,9 @@ async function handler(req, res) {
     if (err instanceof ConfigError) return send(503, { error: 'The generator is not configured on this server.', reason: err.message });
     const upstream = err && err.status;
     if (upstream === 429) return send(503, { error: 'The AI provider is rate-limiting us (free tier). Please try again in a minute.' }, { 'Retry-After': '60' });
-    console.error('generate failed:', err && err.message);   // never log keys or the request body
-    return send(502, { error: 'Guide generation failed upstream. Please try again.', reason: String((err && err.message) || err).slice(0, 200).replace(/key=[^&\s]+/gi, 'key=***') });
+    // Never return upstream error text to the browser: it can contain request headers/keys. Log server-side only.
+    console.error('generate upstream error:', String((err && err.message) || err).replace(/(gsk_|tvly-|sk-|AIza)[A-Za-z0-9_-]+/g, '$1***').slice(0, 300));
+    return send(502, { error: 'Guide generation failed upstream. Please try again.', reason: 'The model or search service returned an error. If this keeps happening the service key or free-tier quota may need attention.' });
   }
 }
 module.exports = handler;
